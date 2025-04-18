@@ -4,6 +4,7 @@ import Form from "@/src/Form"
 import tw from "@/tailwind"
 import { Feather } from "@expo/vector-icons"
 import { StyleSheet, View, Text, SafeAreaView, StatusBar, TouchableOpacity } from "react-native"
+import 'react-native-gesture-handler';
 
 function MainApp() {
   const { user, signOut } = useAuth()
