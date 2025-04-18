@@ -5,6 +5,15 @@ import tw from "@/tailwind"
 import { Feather } from "@expo/vector-icons"
 import { StyleSheet, View, Text, SafeAreaView, StatusBar, TouchableOpacity } from "react-native"
 import 'react-native-gesture-handler';
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 
 function MainApp() {
   const { user, signOut } = useAuth()
