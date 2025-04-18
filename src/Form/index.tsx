@@ -15,6 +15,7 @@ import tw from "@/tailwind";
 import { moneyMask } from "@/mask/money.mask";
 import { onlyNumbers } from "@/mask/only-numbers";
 import { heightMask } from "@/mask/height.mask";
+import * as Notifications from 'expo-notifications';
 
 
 export default function Form() {
@@ -40,9 +41,23 @@ export default function Form() {
         setPeso("");
     }
 
+    const notificacao = async () => {
+        const { status } = await Notifications.getPermissionsAsync();
+        if (status === "granted") {
+            await Notifications.scheduleNotificationAsync({
+                content: {
+                    title: "IMC Calculado",
+                    body: `Seu IMC é ${resultado}`,
+                    data: { resultado },
+                },
+                trigger: null,
+            });
+        }
+    }
+
     function calcular() {
         
-
+        notificacao();
         
         
         setMessagemResultado("Mensagem");
