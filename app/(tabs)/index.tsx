@@ -1,74 +1,52 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import Auth from "@/components/Auth"
+import { AuthProvider, useAuth } from "@/context/AuthContext"
+import Form from "@/src/Form"
+import tw from "@/tailwind"
+import { Feather } from "@expo/vector-icons"
+import { StyleSheet, View, Text, SafeAreaView, StatusBar, TouchableOpacity } from "react-native"
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+function MainApp() {
+  const { user, signOut } = useAuth()
 
-export default function HomeScreen() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      {!user ? (
+        <Auth />
+      ) : (
+        <View>
+          <Text onPress={signOut} style={tw`ml-4 absolute top-0 mb-10 z-10 `}>
+              <Feather onPress={signOut} name="log-out" size={24}  />
+          </Text>
+          <View >
+            
+            {/* <Text style={styles.welcomeText}>Welcome!</Text>
+            <Text style={styles.userText}>You are logged in as:</Text>
+            <Text style={styles.emailText}>{user.email}</Text>
+            <Text style={styles.userText}>User: {user.name}</Text>
+            */}
+            
+            <Text style={tw`flex justify-center items-center  p-10 text-red-600 text-xl font-bold`}>Bem vindo, {user.name}!</Text>
+            <Form />
+          </View>
+        </View>
+      )}
+    </SafeAreaView>
+  )
+}
+
+export default function App() {
+  return (
+    <AuthProvider>
+      <MainApp />
+    </AuthProvider>
+  )
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: "#e0e5e5",
+    paddingTop: 40,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+})
